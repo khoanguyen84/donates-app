@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
-import DonorService from './../../services/donorService';
+import DonorService from '../../services/donorService';
 import Helper from '../../helper/Helper.js';
 
 const FirstPage = 1;
 const PreviousPage = 2;
 const NextPage = 3;
 const LastPage = 4;
+
+
 function DonorList() {
     const [donorsTop20, setDonorsTop20] = useState([])
     const [donors, setDonors] = useState([])
     const [pagination, setPagination] = useState({
         totalPage: 0,
-        limit: 15
+        limit: 20
     })
     const [page, setPage] = useState(1);
     const [pageActive, setPageActive] = useState(FirstPage)
     const [loading, setLoading] = useState(false)
+    const [thread, setThread] = useState(0)
 
     useEffect(() => {
         try {
@@ -34,19 +37,27 @@ function DonorList() {
         } catch (error) {
 
         }
-    }, [page])
-    useEffect(() => {
-        try {
-            async function fetchData() {
-                let donorsRes = await DonorService.getDonors();
-                donorsRes.sort((donor1, donor2) => donor2.id - donor1.id);
-                setDonorsTop20(donorsRes.slice(0, 15))
-            }
-            fetchData()
-        } catch (error) {
+    }, [page, thread])
 
+    useEffect(() => {
+        const handleGetThread = (e) => {
+            setThread(e.detail)
         }
+        window.addEventListener('9999', handleGetThread)
     }, [])
+
+    // useEffect(() => {
+    //     try {
+    //         async function fetchData() {
+    //             let donorsRes = await DonorService.getDonors();
+    //             donorsRes.sort((donor1, donor2) => donor2.id - donor1.id);
+    //             setDonorsTop20(donorsRes.slice(0, 15))
+    //         }
+    //         fetchData()
+    //     } catch (error) {
+
+    //     }
+    // }, [thread])
 
     const handleClickFirst = (e) => {
         e.preventDefault();
@@ -79,43 +90,58 @@ function DonorList() {
     }
     return (
         <div className="container-fluid">
-            <div className="row">
-                <div className="col-md-6">
-                    <h3 className="text-warning">DANH SÁCH CON CHÁU VỪA PHỤNG CÚNG</h3>
-                    <table className="table table-warning table-striped">
-                        <thead>
-                            <tr>
-                                <th>STT</th>
-                                <th>Họ và tên</th>
-                                <th>Phái</th>
-                                <th>Số tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                donorsTop20.map((donor) => (
-                                    <tr key={donor.id}>
-                                        <td>{donor.id}</td>
-                                        <td>{donor.fullname}</td>
-                                        <td>{donor.branchId}</td>
-                                        <td className="text-end">{Helper.formatCurrency(donor.amount)}</td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div className="col-md-6">
-                    <h3 className="text-success">DANH SÁCH CON CHÁU PHỤNG CÚNG</h3>
+            {/* <div className="row">
+                <div className="col-md-12">
+                    <h3 className="text-warning">DANH SÁCH VỪA PHỤNG CÚNG</h3>
                     {
                         loading ? <p>Đang tải dữ liệu...</p> : (
-                            <table className="table table-success table-striped">
-                                <thead>
+                            <table className="table table-warning table-striped">
+                                <thead className="table-danger">
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Họ và tên</th>
-                                        <th>Phái</th>
-                                        <th className="text-end">Số tiền</th>
+                                        <th className="align-middle">STT</th>
+                                        <th className="align-middle">Họ và tên</th>
+                                        <th className="align-middle">Phái</th>
+                                        <th className="text-end align-middle">Số tiền</th>
+                                        <th className="text-end align-middle">Loại tiền</th>
+                                        <th className="align-middle">Vật phẩm</th>
+                                        <th className="align-middle">Ghi chú</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        donorsTop20.map((donor) => (
+                                            <tr key={donor.id}>
+                                                <td>{donor.id}</td>
+                                                <td>{donor.fullname}</td>
+                                                <td>{donor.branchId}</td>
+                                                <td className="text-end">{Helper.formatCurrency(donor.amount)}</td>
+                                                <td className="text-end">{donor.unitId}</td>
+                                                <td>{donor.items}</td>
+                                                <td>{donor.noted}</td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        )
+                    }
+                </div>
+            </div> */}
+            <div className="row">
+            <div className="col-md-12">
+                    <h3 className="text-success">DANH SÁCH PHỤNG CÚNG</h3>
+                    {
+                        loading ? <p>Đang tải dữ liệu...</p> : (
+                            <table className="table table-bordered table-success table-striped">
+                                <thead className="table-danger">
+                                    <tr>
+                                        <th className="align-middle" style={{width: '10px'}}>STT</th>
+                                        <th className="align-middle" style={{width: '350px'}}>Họ và tên</th>
+                                        <th className="align-middle" style={{width: '100px'}}>Phái</th>
+                                        <th className="text-end align-middle">Số tiền</th>
+                                        <th className="text-end align-middle" style={{width: '80px'}}>Loại tiền</th>
+                                        <th className="align-middle">Vật phẩm</th>
+                                        <th className="align-middle">Ghi chú</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -126,6 +152,9 @@ function DonorList() {
                                                 <td>{donor.fullname}</td>
                                                 <td>{donor.branchId}</td>
                                                 <td className="text-end">{Helper.formatCurrency(donor.amount)}</td>
+                                                <td className="text-end">{donor.unitId}</td>
+                                                <td>{donor.items}</td>
+                                                <td>{donor.noted}</td>
                                             </tr>
                                         ))
                                     }

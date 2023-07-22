@@ -4,16 +4,22 @@ import Navbar from "./components/layout/Navbar";
 import './App.css';
 import Footer from './components/layout/Footer';
 import DonorList from "./components/donor/DonorList";
-import Dashboard from "./components/dashboard/Dashboard";
+import CreateDonor from "./components/dashboard/CreateDonor";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Dashboard from "./components/dashboard/dashoard";
 
 function App() {
+
   return (
     <>
+      <ToastContainer />
       <Navbar />
       <div className="container-fluid">
         <Routes>
-          <Route path="/" element={<DonorList />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<DonorList/>} />
+          <Route path="/dashboard" element={<Dashboard/>} />
+          <Route path="/create-donor" element={<CreateDonor/>} />
         </Routes>
       </div>
       <Footer />
