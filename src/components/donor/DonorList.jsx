@@ -19,6 +19,7 @@ function DonorList() {
     const [pageActive, setPageActive] = useState(FirstPage)
     const [loading, setLoading] = useState(false)
     const [thread, setThread] = useState(0)
+    const [keyword, setKeyword] = useState()
 
     useEffect(() => {
         try {
@@ -26,6 +27,9 @@ function DonorList() {
             async function fetchData() {
                 let donorsRes = await DonorService.getDonors();
                 donorsRes.sort((donor1, donor2) => donor2.id - donor1.id);
+                if(keyword){
+                    donorsRes = donorsRes.filter((item) => item.fullname?.toLowerCase().includes(keyword.toLowerCase()))
+                }
                 setPagination({
                     ...pagination,
                     totalPage: Math.ceil(donorsRes.length / pagination.limit)
@@ -37,7 +41,7 @@ function DonorList() {
         } catch (error) {
 
         }
-    }, [page, thread])
+    }, [page, thread, keyword])
 
     useEffect(() => {
         const handleGetThread = (e) => {
@@ -88,6 +92,11 @@ function DonorList() {
         }
 
     }
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        setKeyword(keyword)
+    }
     return (
         <div className="container">
             {/* <div className="row">
@@ -128,60 +137,66 @@ function DonorList() {
                 </div>
             </div> */}
             <div className="row">
-            <div className="col-md-12">
+                <div className="d-flex align-items-center justify-content-between">
                     <h3 className="text-success">DANH SÁCH PHỤNG CÚNG</h3>
-                    {
-                        loading ? <p>Đang tải dữ liệu...</p> : (
-                            <table className="table table-bordered table-success table-striped">
-                                <thead className="table-danger">
-                                    <tr>
-                                        <th className="align-middle" style={{width: '10px'}}>STT</th>
-                                        <th className="align-middle" style={{width: '350px'}}>Họ và tên</th>
-                                        <th className="align-middle" style={{width: '100px'}}>Phái</th>
-                                        <th className="text-end align-middle">Số tiền</th>
-                                        <th className="text-end align-middle" style={{width: '80px'}}>Loại tiền</th>
-                                        <th className="align-middle">Vật phẩm</th>
-                                        <th className="align-middle">Địa chỉ</th>
-                                        <th className="align-middle">Ghi chú</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        donors.map((donor) => (
-                                            <tr key={donor.id}>
-                                                <td>{donor.id}</td>
-                                                <td className="text-wrap">{donor.fullname}</td>
-                                                <td>{donor.branchId}</td>
-                                                <td className="text-end">{Helper.formatCurrency(donor.amount)}</td>
-                                                <td className="text-end">{donor.unitId}</td>
-                                                <td className="text-wrap">{donor.items}</td>
-                                                <td className="text-wrap">{donor.address}</td>
-                                                <td className="text-wrap">{donor.noted}</td>
-                                            </tr>
-                                        ))
-                                    }
-                                </tbody>
-                            </table>
-                        )
-                    }
-                    <div>
-                        <nav>
-                            <ul className="pagination">
-                                <li className={page <= 1 ? "page-item disabled" : "page-item"}>
-                                    <button className={pageActive == FirstPage ? "page-link active" : "page-link"} onClick={handleClickFirst}>Đầu</button>
-                                </li>
-                                <li className={page <= 1 ? "page-item disabled" : "page-item"}>
-                                    <button className={pageActive == PreviousPage ? "page-link active" : "page-link"} onClick={handleClickPrevious}>Trước</button>
-                                </li>
-                                <li className={page >= pagination.totalPage ? "page-item disabled" : "page-item"}>
-                                    <button className={pageActive == NextPage ? "page-link active" : "page-link"} onClick={handleClickNext}>Sau</button>
-                                </li>
-                                <li className={page >= pagination.totalPage ? "page-item disabled" : "page-item"}>
-                                    <button className={pageActive == LastPage ? "page-link active" : "page-link"} onClick={handleClickLast}>Cuối</button>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+                    <form onSubmit={handleSearch} className="col-sm-6">
+                        <div className="d-flex align-items-center">
+                            <input className="form-control me-1" type="search" placeholder="Tìm kiếm theo tên" onInput={(e) => setKeyword(e.target.value)} />
+                            <button className="btn btn-outline-dark w-25">Tìm kiếm</button>
+                        </div>
+                    </form>
+                </div>
+                {
+                    loading ? <p>Đang tải dữ liệu...</p> : (
+                        <table className="table table-bordered table-success table-striped">
+                            <thead className="table-danger">
+                                <tr>
+                                    <th className="align-middle" style={{ width: '10px' }}>STT</th>
+                                    <th className="align-middle" style={{ width: '350px' }}>Họ và tên</th>
+                                    <th className="align-middle" style={{ width: '100px' }}>Phái</th>
+                                    <th className="text-end align-middle">Số tiền</th>
+                                    <th className="text-end align-middle" style={{ width: '80px' }}>Loại tiền</th>
+                                    <th className="align-middle">Vật phẩm</th>
+                                    <th className="align-middle">Địa chỉ</th>
+                                    <th className="align-middle">Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    donors.map((donor) => (
+                                        <tr key={donor.id}>
+                                            <td>{donor.id}</td>
+                                            <td className="text-wrap">{donor.fullname}</td>
+                                            <td>{donor.branchId}</td>
+                                            <td className="text-end">{Helper.formatCurrency(donor.amount)}</td>
+                                            <td className="text-end">{donor.unitId}</td>
+                                            <td className="text-wrap">{donor.items}</td>
+                                            <td className="text-wrap">{donor.address}</td>
+                                            <td className="text-wrap">{donor.noted}</td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    )
+                }
+                <div>
+                    <nav>
+                        <ul className="pagination">
+                            <li className={page <= 1 ? "page-item disabled" : "page-item"}>
+                                <button className={pageActive == FirstPage ? "page-link active" : "page-link"} onClick={handleClickFirst}>Trang Đầu</button>
+                            </li>
+                            <li className={page <= 1 ? "page-item disabled" : "page-item"}>
+                                <button className={pageActive == PreviousPage ? "page-link active" : "page-link"} onClick={handleClickPrevious}>Trang Trước</button>
+                            </li>
+                            <li className={page >= pagination.totalPage ? "page-item disabled" : "page-item"}>
+                                <button className={pageActive == NextPage ? "page-link active" : "page-link"} onClick={handleClickNext}>Trang Sau</button>
+                            </li>
+                            <li className={page >= pagination.totalPage ? "page-item disabled" : "page-item"}>
+                                <button className={pageActive == LastPage ? "page-link active" : "page-link"} onClick={handleClickLast}>Trang Cuối</button>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
