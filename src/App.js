@@ -14,8 +14,8 @@ function App() {
   return (
     <>
       <ToastContainer />
-      <Navbar />
-      <div className="container-fluid">
+      <div className="container">
+        <Navbar />
         <Routes>
           <Route path="/" element={<DonorList/>} />
           <Route path="/dashboard" element={<Dashboard/>} />

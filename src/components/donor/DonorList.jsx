@@ -89,7 +89,7 @@ function DonorList() {
 
     }
     return (
-        <div className="container-fluid">
+        <div className="container">
             {/* <div className="row">
                 <div className="col-md-12">
                     <h3 className="text-warning">DANH SÁCH VỪA PHỤNG CÚNG</h3>
