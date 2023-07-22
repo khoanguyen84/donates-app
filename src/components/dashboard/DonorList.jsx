@@ -111,12 +111,12 @@ function DonorList(props) {
                             <thead className="table-danger">
                                 <tr>
                                     <th className="align-middle" style={{ width: '10px' }}>STT</th>
-                                    <th className="align-middle" style={{ width: '350px' }}>Họ và tên</th>
+                                    <th className="align-middle" style={{ width: '250px' }}>Họ và tên</th>
                                     <th className="align-middle" style={{ width: '100px' }}>Phái</th>
                                     <th className="text-end align-middle">Số tiền</th>
                                     <th className="text-end align-middle" style={{ width: '80px' }}>Loại tiền</th>
                                     <th className="align-middle">Vật phẩm</th>
-                                    <th className="align-middle">Ghi chú</th>
+                                    <th className="align-middle">Địa chỉ</th>
                                     <th className="align-middle">Thao tác</th>
                                 </tr>
                             </thead>
@@ -125,12 +125,12 @@ function DonorList(props) {
                                     donors.map((donor) => (
                                         <tr key={donor.id}>
                                             <td>{donor.id}</td>
-                                            <td>{donor.fullname}</td>
+                                            <td className="text-wrap">{donor.fullname}</td>
                                             <td>{donor.branchId}</td>
                                             <td className="text-end">{Helper.formatCurrency(donor.amount)}</td>
                                             <td className="text-end">{donor.unitId}</td>
-                                            <td>{donor.items}</td>
-                                            <td>{donor.noted}</td>
+                                            <td className="text-wrap">{donor.items}</td>
+                                            <td className="text-wrap">{donor.address}</td>
                                             <td className="text-end" style={{width: '120px'}}>
                                                 <button className="btn btn-link btn-sm" onClick={() => setDonor(donor)}>
                                                     <i className="fa fa-edit me-2"></i>
