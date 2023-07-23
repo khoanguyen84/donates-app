@@ -1,7 +1,10 @@
 import axios from "axios";
 
+//'https://localhost:7168/api/', 
+//'https://6497ecc79543ce0f49e18101.mockapi.io/',
+// 'http://www.ho-nguyen-huu.somee.com/api/', 
 const axiosClient = axios.create({
-    baseURL: 'https://6497ecc79543ce0f49e18101.mockapi.io/',
+    baseURL: 'http://www.ho-nguyen-huu.somee.com/api/', 
     headers: {
         'Content-Type': 'application/json'
     }

@@ -6,6 +6,7 @@ import EditDonor from "./EditDonor";
 
 function Dashboard() {
     const [donor, setDonor] = useState({})
+    const [removeId, setRemoveId] = useState(0)
     return (
         <div className="container bg-light p-4">
             <div className="d-flex align-items-center justify-content-between">
@@ -16,14 +17,19 @@ function Dashboard() {
                 </Link>
             </div>
             <section className="summary mb-3">
-                <SummaryDonor />
+                <SummaryDonor removeId={removeId} />
             </section>
             <section className="donor-list mb-3">
                 <div className="row">
                     <EditDonor donor={donor} setDonor={setDonor} />
                 </div>
                 <div className="row">
-                    <DonorList donor={donor} setDonor={setDonor} />
+                    <DonorList
+                        donor={donor}
+                        setDonor={setDonor}
+                        setRemoveId={setRemoveId}
+                        removeId={removeId}
+                    />
                 </div>
             </section>
         </div>

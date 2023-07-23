@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DonorService from '../../services/donorService';
 import Helper from '../../helper/Helper.js';
+import { toast } from "react-toastify";
 
 const FirstPage = 1;
 const PreviousPage = 2;
@@ -9,7 +10,7 @@ const LastPage = 4;
 
 
 function DonorList(props) {
-    const { donor, setDonor } = props
+    const { donor, setDonor, removeId, setRemoveId } = props
 
     const [donors, setDonors] = useState([])
     const [pagination, setPagination] = useState({
@@ -20,14 +21,14 @@ function DonorList(props) {
     const [pageActive, setPageActive] = useState(FirstPage)
     const [loading, setLoading] = useState(false)
     const [keyword, setKeyword] = useState()
-
+    
     useEffect(() => {
         try {
             setLoading(true)
             async function fetchData() {
                 let donorsRes = await DonorService.getDonors();
                 donorsRes.sort((donor1, donor2) => donor2.id - donor1.id);
-                if(keyword){
+                if (keyword) {
                     donorsRes = donorsRes.filter((item) => item.fullname?.toLowerCase().includes(keyword.toLowerCase()))
                 }
                 setPagination({
@@ -41,7 +42,7 @@ function DonorList(props) {
         } catch (error) {
 
         }
-    }, [page, donor, keyword])
+    }, [page, donor, keyword, removeId])
 
     const handleClickFirst = (e) => {
         e.preventDefault();
@@ -75,6 +76,22 @@ function DonorList(props) {
     const handleSearch = (e) => {
         e.preventDefault();
         setKeyword(keyword)
+    }
+
+    const removeDonor = async (donor) => {
+        let confirm = window.confirm('Bạn có chắc muốn xóa thông tin phụng cúng này không?')
+        try {
+            if(confirm){
+                let delRes = await DonorService.removeDonor(donor.id)
+                if(delRes){
+                    toast.info('Thông tin phụng cúng đã được xóa!')
+                    setRemoveId(donor.id)
+                }
+            }
+        } catch (error) {
+            toast.error('Đã có lỗi, cần thao tác lại!')
+        }
+        
     }
     return (
         <div className="container-fluid">
@@ -117,6 +134,7 @@ function DonorList(props) {
                                     <th className="text-end align-middle" style={{ width: '80px' }}>Loại tiền</th>
                                     <th className="align-middle">Vật phẩm</th>
                                     <th className="align-middle">Địa chỉ</th>
+                                    <th className="align-middle">Ghi chú</th>
                                     <th className="align-middle">Thao tác</th>
                                 </tr>
                             </thead>
@@ -131,11 +149,18 @@ function DonorList(props) {
                                             <td className="text-end">{donor.unitId}</td>
                                             <td className="text-wrap">{donor.items}</td>
                                             <td className="text-wrap">{donor.address}</td>
-                                            <td className="text-end" style={{width: '120px'}}>
-                                                <button className="btn btn-link btn-sm" onClick={() => setDonor(donor)}>
-                                                    <i className="fa fa-edit me-2"></i>
-                                                    Chỉnh sửa
-                                                </button>
+                                            <td className="text-wrap">{donor.noted}</td>
+                                            <td className="text-end" style={{ width: '120px' }}>
+                                                <div className="d-flex flex-column justify-content-center align-items-center">
+                                                    <button className="btn btn-link btn-sm" onClick={() => setDonor(donor)}>
+                                                        <i className="fa fa-edit me-2"></i>
+                                                        Chỉnh sửa
+                                                    </button>
+                                                    <button className="btn btn-link btn-sm text-danger" onClick={() => removeDonor(donor)}>
+                                                        <i className="fa fa-edit me-2"></i>
+                                                        Xóa
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))
