@@ -25,7 +25,7 @@ function emitNewThread() {
         detail: Math.floor(Math.random() * 10000)
       })
     )
-  }, 120 * 1000)
+  }, 5 * 60 * 1000)
 }
 
 emitNewThread();
