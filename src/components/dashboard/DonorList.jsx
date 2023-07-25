@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import DonorService from '../../services/donorService';
 import Helper from '../../helper/Helper.js';
 import { toast } from "react-toastify";
+import Spinner from "../layout/Spinner";
 
 const FirstPage = 1;
 const PreviousPage = 2;
@@ -81,11 +82,13 @@ function DonorList(props) {
     const removeDonor = async (donor) => {
         let confirm = window.confirm('Bạn có chắc muốn xóa thông tin phụng cúng này không?')
         try {
+            setLoading(true)
             if(confirm){
                 let delRes = await DonorService.removeDonor(donor.id)
                 if(delRes){
                     toast.info('Thông tin phụng cúng đã được xóa!')
                     setRemoveId(donor.id)
+                    setLoading(false)
                 }
             }
         } catch (error) {
@@ -123,8 +126,8 @@ function DonorList(props) {
                     </form>
                 </div>
                 {
-                    loading ? <p>Đang tải dữ liệu...</p> : (
-                        <table className="table table-bordered table-success table-striped">
+                    loading ? <Spinner/> : (
+                        <table className="table table-sm table-bordered table-hover table-warning table-striped table-responsive-sm">
                             <thead className="table-danger">
                                 <tr>
                                     <th className="align-middle" style={{ width: '10px' }}>STT</th>
@@ -157,7 +160,7 @@ function DonorList(props) {
                                                         Chỉnh sửa
                                                     </button>
                                                     <button className="btn btn-link btn-sm text-danger" onClick={() => removeDonor(donor)}>
-                                                        <i className="fa fa-edit me-2"></i>
+                                                        <i className="fa fa-trash me-2"></i>
                                                         Xóa
                                                     </button>
                                                 </div>

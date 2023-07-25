@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DonorService from '../../services/donorService';
 import Helper from '../../helper/Helper.js';
+import Spinner from "../layout/Spinner";
 
 const FirstPage = 1;
 const PreviousPage = 2;
@@ -98,7 +99,7 @@ function DonorList() {
         setKeyword(keyword)
     }
     return (
-        <div className="container">
+        <div className="container bg-light p-4">
             {/* <div className="row">
                 <div className="col-md-12">
                     <h3 className="text-warning">DANH SÁCH VỪA PHỤNG CÚNG</h3>
@@ -147,9 +148,9 @@ function DonorList() {
                     </form>
                 </div>
                 {
-                    loading ? <p>Đang tải dữ liệu...</p> : (
-                        <table className="table table-bordered table-success table-striped">
-                            <thead className="table-danger">
+                    loading ? <Spinner/> : (
+                        <table className="table table-sm table-bordered table-hover table-warning table-striped table-responsive-sm">
+                            <thead className="table-success">
                                 <tr>
                                     <th className="align-middle" style={{ width: '10px' }}>STT</th>
                                     <th className="align-middle" style={{ width: '350px' }}>Họ và tên</th>

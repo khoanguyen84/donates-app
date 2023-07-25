@@ -14,15 +14,15 @@ function App() {
   return (
     <>
       <ToastContainer />
-      <div className="container">
+      <div className="container-fluid bg-light">
         <Navbar />
         <Routes>
-          <Route path="/" element={<DonorList/>} />
-          <Route path="/dashboard" element={<Dashboard/>} />
-          <Route path="/create-donor" element={<CreateDonor/>} />
+          <Route path="/" element={<DonorList />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/create-donor" element={<CreateDonor />} />
         </Routes>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 }

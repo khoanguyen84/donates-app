@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup";
 import { toast } from 'react-toastify';
 import DonorService from "../../services/donorService";
 import { Link } from "react-router-dom";
+import Spinner from "../layout/Spinner";
 
 const schema = yup.object({
     fullname: yup.string().required('Chưa có thông tin họ và tên!'),
@@ -12,6 +13,7 @@ const schema = yup.object({
 })
 
 function CreateDonor() {
+    const [loading, setLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -21,13 +23,13 @@ function CreateDonor() {
         resolver: yupResolver(schema),
     })
     const handleSubmitData = async (data) => {
-        console.log(data);
-
         try {
+            setLoading(true)
             let createRes = await DonorService.createDonor(data);
             if (createRes) {
                 toast.success('Thông tin phụng cúng đã được lưu trữ!');
                 reset();
+                setLoading(false)
             }
             else {
                 toast.error('Đã có lỗi, cần thao tác lại!')
@@ -45,6 +47,7 @@ function CreateDonor() {
                     VỀ TRANG QUẢN LÝ
                 </Link>
             </div>
+            {loading ? <Spinner/> : null}
             <form onSubmit={handleSubmit(handleSubmitData)}>
                 <div className="row mb-3">
                     <div className="col-sm-6">
