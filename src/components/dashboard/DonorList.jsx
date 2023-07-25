@@ -120,8 +120,8 @@ function DonorList(props) {
 
                     <form onSubmit={handleSearch} className="col-sm-6">
                         <div className="d-flex align-items-center">
-                            <input className="form-control me-1" type="search" placeholder="Tìm kiếm theo tên" onInput={(e) => setKeyword(e.target.value)} />
-                            <button className="btn btn-outline-dark w-25">Tìm kiếm</button>
+                            <input className="form-control" type="search" placeholder="Tìm kiếm theo tên" onInput={(e) => setKeyword(e.target.value)} />
+                            <button className="btn btn-outline-dark w-25 d-none">Tìm kiếm</button>
                         </div>
                     </form>
                 </div>

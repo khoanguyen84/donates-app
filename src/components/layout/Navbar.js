@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import logo from '../../asset/images/logo.jpg'
 
 function Navbar() {
     return (
@@ -8,7 +9,10 @@ function Navbar() {
         // </div>
         <nav className="navbar navbar-light bg-light">
             <div className="container">
-                <Link className="navbar-brand fw-bolder text-danger" to={'/'} >HỌ NGUYỄN HỮU</Link>
+                <Link className="navbar-brand fw-bolder text-danger d-flex align-items-center" to={'/'} >
+                    <img src={logo} alt=""className="rounded-circle logo-xs me-1" />
+                    HỌ NGUYỄN HỮU
+                </Link>
             </div>
         </nav>
     )
