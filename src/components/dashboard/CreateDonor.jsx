@@ -43,7 +43,7 @@ function CreateDonor() {
             <div className="d-flex align-items-center justify-content-between">
                 <h1 className="text-danger">THÔNG TIN PHỤNG CÚNG</h1>
                 <Link to={'/dashboard'} className="btn btn-warning">
-                    <i className="fa fa-plus me-2"></i>
+                    <i className="fa fa-arrow-left me-2"></i>
                     VỀ TRANG QUẢN LÝ
                 </Link>
             </div>
