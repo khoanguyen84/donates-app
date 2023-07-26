@@ -3,6 +3,7 @@ import DonorService from '../../services/donorService';
 import Helper from '../../helper/Helper.js';
 import { toast } from "react-toastify";
 import Spinner from "../layout/Spinner";
+import helper from '../../helper/Helper';
 
 const FirstPage = 1;
 const PreviousPage = 2;
@@ -22,7 +23,7 @@ function DonorList(props) {
     const [pageActive, setPageActive] = useState(FirstPage)
     const [loading, setLoading] = useState(false)
     const [keyword, setKeyword] = useState()
-    
+
     useEffect(() => {
         try {
             setLoading(true)
@@ -83,9 +84,9 @@ function DonorList(props) {
         let confirm = window.confirm('Bạn có chắc muốn xóa thông tin phụng cúng này không?')
         try {
             setLoading(true)
-            if(confirm){
+            if (confirm) {
                 let delRes = await DonorService.removeDonor(donor.id)
-                if(delRes){
+                if (delRes) {
                     toast.info('Thông tin phụng cúng đã được xóa!')
                     setRemoveId(donor.id)
                     setLoading(false)
@@ -94,7 +95,13 @@ function DonorList(props) {
         } catch (error) {
             toast.error('Đã có lỗi, cần thao tác lại!')
         }
-        
+    }
+
+    const handleExportToExcel = async () => {
+        setLoading(true)
+        let donorsRes = await DonorService.getDonors();
+        helper.exportToExecel(donorsRes, 'Danh sách phung cúng', "DANH SÁCH PHỤNG CÚNG")
+        setLoading(false)
     }
     return (
         <div className="container-fluid">
@@ -122,11 +129,15 @@ function DonorList(props) {
                         <div className="d-flex align-items-center">
                             <input className="form-control" type="search" placeholder="Tìm kiếm theo tên" onInput={(e) => setKeyword(e.target.value)} />
                             <button className="btn btn-outline-dark w-25 d-none">Tìm kiếm</button>
+                            <span className="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-evenly ms-2 w-25" onClick={handleExportToExcel}>
+                                <i className="fa fa-download"></i>
+                                Tải về
+                            </span>
                         </div>
                     </form>
                 </div>
                 {
-                    loading ? <Spinner/> : (
+                    loading ? <Spinner /> : (
                         <table className="table table-sm table-bordered table-hover table-warning table-striped table-responsive-sm">
                             <thead className="table-danger">
                                 <tr>
